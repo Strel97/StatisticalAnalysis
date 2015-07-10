@@ -1,0 +1,65 @@
+// Place all the styles related to the welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.jumbotron {
+  margin-top: 2%;
+  background-image: image-url('header.jpg');
+  height: 500px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+
+.jumbotron .container {
+  position: relative;
+  top:100px;
+}
+
+.jumbotron h1 {
+  color: #fff;
+  font-size: 48px;
+  font-family: 'Shift', sans-serif;
+  font-weight: bold;
+}
+
+.jumbotron p {
+  font-size: 20px;
+  color: #fff;
+}
+
+.jumbotron p a {
+  width: 30%;
+}
+
+.learn-more h3 {
+  font-family: 'Shift', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.learn-more a {
+  color: #00b0ff;
+}
+
+#calculations h1 {
+  text-align: center;
+}
+
+.neighborhood-guides {
+  background-color: #efefef;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.neighborhood-guides h2 {
+  color: #393c3d;
+  font-size: 24px;
+}
+
+.neighborhood-guides p {
+  font-size: 15px;
+  margin-bottom: 13px;
+}
+
+.calculate-btn {
+  margin-bottom: 20px;
+}

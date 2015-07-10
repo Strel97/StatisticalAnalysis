@@ -1,0 +1,39 @@
+// Place all the styles related to the metrics controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+th {
+  text-align: center;
+}
+
+tbody > tr > th {
+  text-align: left;
+}
+
+td {
+  text-align: center;
+}
+
+.panel-heading > h1 {
+  font-size: 35px;
+}
+
+h1 {
+  font-size: 35px;
+}
+
+.panel-heading > h2 {
+  font-size: 20px;
+}
+
+#canvas-container {
+  width: 100%;
+  text-align: right;
+}
+
+canvas {
+  display: inline;
+}
+
+.minimize {
+  font-size: 12px;
+}

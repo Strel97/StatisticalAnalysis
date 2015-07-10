@@ -1,0 +1,399 @@
+<div id="metrics">
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Your initial metrics</h1>
+      </div>
+      <div class="panel-body">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Project</th>
+            <th>LOC</th>
+            <th>NOM</th>
+            <th>NOP</th>
+            <th>NDD</th>
+            <th>HIT</th>
+            <th>CM</th>
+            <th>WOC</th>
+            <th>FDP</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <%
+             @metrics.each do |key, value|
+          %>
+              <tr>
+                <td><%= key %></td>
+                <%
+                   value.each do |val|
+                %>
+                    <td><%= val.round(1) %></td>
+                <%
+                   end
+                %>
+              </tr>
+          <%
+             end
+          %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="correlation">
+    <div class="container">
+      <div class="intervals">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Intervals</h1>
+          </div>
+          <div class="panel-body">
+            <table class="table table-hover">
+              <tbody>
+              <%
+                 @intervals.each do |name, values|
+              %>
+                  <tr>
+                    <th><%= name %></th>
+                    <%
+                       values.each do |val|
+                    %>
+                        <td><%= val.round(1) %></td>
+                    <%
+                       end
+                    %>
+                  </tr>
+              <%
+                 end
+              %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="measures">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Measures</h1>
+          </div>
+          <div class="panel-body">
+            <table class="table table-hover">
+              <tbody>
+              <%
+                 @measures.each do |name, values|
+              %>
+                  <tr>
+                    <th><%= name %></th>
+                    <%
+                       values.each do |val|
+                    %>
+                        <td><%= val.round(1) %></td>
+                    <%
+                       end
+                    %>
+                  </tr>
+              <%
+                 end
+              %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="quantities">
+        <div class="container">
+
+          <h1>Quantities</h1>
+
+          <div class="row">
+            <%
+               @quantities.each_pair do |name, values|
+            %>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h2 class="panel-title"><%= name %></h2>
+                  </div>
+                  <div class="panel-body">
+                    <div class="col-md-6">
+                      <!-- Table with data -->
+                      <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                          <th></th>
+                          <th>Metric Count</th>
+                          <th>Percentage form</th>
+                        </tr>
+                        </thead>
+                        <%
+                           5.times do |i|
+                        %>
+                            <tr>
+                              <th>Interval <%= i + 1 %></th>
+                              <td><%= values[0][i] %></td>
+                              <td><%= values[1][i].to_s + '%' %></td>
+                            </tr>
+                        <%
+                           end
+                        %>
+                      </table>
+                    </div>
+
+                    <div class="col-md-6">
+                      <!-- Chart id here -->
+                      <div id="canvas-container">
+                        <canvas id="<%= name %>-canvas" width="400" height="200">
+                          <script type="text/javascript">
+                              var data = {
+                                  labels: ['Interval 1', 'Interval 2', 'Interval 3', 'Interval 4', 'Interval 5'],
+                                  datasets: [
+                                      {
+                                          label: '2010 customers #',
+                                          fillColor: 'rgba(151,187,205,0.5)',
+                                          strokeColor: 'rgba(151,187,205,0.8)',
+                                          highlightFill: 'rgba(151,187,205,0.75)',
+                                          highlightStroke: 'rgba(151,187,205,1)',
+                                          data: <%= values[0] %>
+                                      }
+                                  ]
+                              };
+
+                              var ctx = document.getElementById("<%= name %>-canvas").getContext("2d");
+                              var chart = new Chart(ctx).Bar(data);
+                          </script>
+                        </canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <%
+               end
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="ranks">
+        <div class="container">
+          <div id="metric-ranks">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title">Ranks</h1>
+              </div>
+              <div class="panel-body">
+                <!-- Table with ranks -->
+                <table class="table table-hover">
+                  <thead>
+                  <tr>
+                    <%
+                       @ranks.keys.each do |metric|
+                    %>
+                        <th><%= metric %></th>
+                    <%
+                       end
+                    %>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <%
+                     (0...@ranks.values.first.length).each do |line|
+                  %>
+                      <tr>
+                        <%
+                           @ranks.each_pair do |key, value|
+                        %>
+                            <td><%= value[line] %></td>
+                        <%
+                           end
+                        %>
+                      </tr>
+                  <%
+                     end
+                  %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="rank-difference">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title">Rank difference in second power</h1>
+              </div>
+              <div class="panel-body">
+                <!-- Table with rank difference in second power -->
+                <table class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <%
+                       @rank_difference.keys.each do |metric|
+                    %>
+                        <th class="minimize"><%= metric %></th>
+                    <%
+                       end
+                    %>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <%
+                     (0...@rank_difference.values.first.length).each do |line|
+                  %>
+                      <tr>
+                        <%
+                           @rank_difference.each_pair do |key, value|
+                        %>
+                            <td><%= value[line] %></td>
+                        <%
+                           end
+                        %>
+                      </tr>
+                  <%
+                     end
+                  %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="sum">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h1 class="panel-title">Sum of rank differences</h1>
+                  </div>
+                  <div class="panel-body">
+                    <!-- Table with sum of rank differences -->
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <%
+                           @sum.keys.each do |metric|
+                        %>
+                            <th class="minimize"><%= metric %></th>
+                        <%
+                           end
+                        %>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <% @sum.values.each do |val| %>
+                            <td><%= val %></td>
+                        <% end %>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="t">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h1 class="panel-title">T</h1>
+                  </div>
+                  <div class="panel-body">
+                    <!-- Table with t -->
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <%
+                           @t.keys.each do |metric|
+                        %>
+                            <th class="minimize"><%= metric %></th>
+                        <%
+                           end
+                        %>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <% @t.values.each do |val| %>
+                            <td><%= val.round(2) %></td>
+                        <% end %>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="charts">
+            <div class="row">
+              <%
+                 (0...5).each do |direct_metric_id|
+                   (0...3).each do |indirect_metric_id|
+
+                     direct_metric_name = @transposed_metrics.keys[direct_metric_id]
+                     indirect_metric_name = @transposed_metrics.keys[indirect_metric_id + 5]
+
+                     direct_values = @transposed_metrics[direct_metric_name].sort
+                     indirect_values = @transposed_metrics[indirect_metric_name].sort
+                     direct_indirect_name = "#{direct_metric_name}-#{indirect_metric_name}"
+              %>
+                      <!-- Charts is here -->
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h2 class="panel-title"><%= "#{direct_metric_name} - #{indirect_metric_name}" %></h2>
+                        </div>
+                        <div class="panel-body">
+                          <div class="col-md-12">
+                            <canvas id="<%= direct_indirect_name %>-canvas" width="1100" height="200">
+                              <script type="text/javascript">
+                                  var data = {
+                                      labels: <%= direct_values %>,
+                                      datasets: [
+                                          {
+                                              label: '<%= direct_indirect_name %>',
+                                              fillColor: "rgba(151,187,205,0)",
+                                              strokeColor: "rgba(151,187,205,0)",
+                                              pointColor: "rgba(151,187,205,1)",
+                                              pointStrokeColor: "#fff",
+                                              pointHighlightFill: "#fff",
+                                              pointHighlightStroke: "rgba(151,187,205,1)",
+                                              data: <%= indirect_values %>
+                                          },
+                                          {
+                                              label: 'Linear trend',
+                                              fillColor: "rgba(100,100,100,0)",
+                                              strokeColor: "rgba(100,100,100,1)",
+                                              pointColor: "rgba(100,100,100,1)",
+                                              pointStrokeColor: "#fff",
+                                              pointHighlightFill: "#fff",
+                                              pointHighlightStroke: "rgba(151,187,205,1)",
+                                              data: <%= @linear_trend_y[direct_indirect_name] %>
+                                          }
+                                      ]
+                                  };
+
+                                  var ctx = document.getElementById("<%= direct_indirect_name %>-canvas").getContext("2d");
+                                  var chart = new Chart(ctx).Line(data, {
+                                      bezierCurve: false
+                                  });
+                              </script>
+                            </canvas>
+                          </div>
+                        </div>
+                      </div>
+                  <%
+                     end
+                     end
+                  %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
